@@ -10,6 +10,7 @@ import frc.robot.commands.Eject;
 import frc.robot.commands.ExampleAuto;
 import frc.robot.commands.Intake;
 import frc.robot.commands.LaunchSequence;
+import frc.robot.commands.cmdLaunch_TeleOp;
 import frc.robot.subsystems.CANDriveSubsystem;
 import frc.robot.subsystems.CANFuelSubsystem;
 
@@ -26,11 +27,12 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    driveSubsystem.setDefaultCommand(new Drive(driveSubsystem, ()->-driverController.getLeftY(), ()->driverController.getRightY()));
+    driveSubsystem.setDefaultCommand(new Drive(driveSubsystem, ()->-driverController.getLeftY(), ()->driverController.getRightX()));
     fuelSubsystem.setDefaultCommand(fuelSubsystem.run(() -> fuelSubsystem.stop()));
     driverController.leftBumper().whileTrue(new Intake(fuelSubsystem));
     driverController.rightBumper().whileTrue(new LaunchSequence(fuelSubsystem));
-    driverController.a().whileTrue(new Eject(fuelSubsystem));
+    driverController.a().whileTrue(new cmdLaunch_TeleOp(fuelSubsystem, ()->-0.8, ()->1));
+    driverController.b().whileTrue(new cmdLaunch_TeleOp(fuelSubsystem, ()->1, ()->1));
   }
 
   public Command getAutonomousCommand() {
