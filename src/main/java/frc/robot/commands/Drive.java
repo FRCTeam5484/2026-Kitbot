@@ -2,18 +2,22 @@ package frc.robot.commands;
 
 import static frc.robot.Constants.OperatorConstants.*;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.CANDriveSubsystem;
 
 public class Drive extends Command {
   CANDriveSubsystem driveSubsystem;
-  CommandXboxController controller;
+  DoubleSupplier m_speed;
+  DoubleSupplier m_turn;
 
-  public Drive(CANDriveSubsystem driveSystem, CommandXboxController driverController) {
-    addRequirements(driveSystem);
+  public Drive(CANDriveSubsystem driveSystem, DoubleSupplier speed, DoubleSupplier turn) {
+    
     driveSubsystem = driveSystem;
-    controller = driverController;
+    m_speed = speed;
+    m_turn = turn;
+    addRequirements(driveSystem);
   }
 
   @Override
@@ -22,7 +26,7 @@ public class Drive extends Command {
 
   @Override
   public void execute() {
-    driveSubsystem.driveArcade(-controller.getLeftY() * DRIVE_SCALING, -controller.getRightX() * ROTATION_SCALING);
+    driveSubsystem.driveArcade(m_speed.getAsDouble() * DRIVE_SCALING, m_turn.getAsDouble() * ROTATION_SCALING);
   }
 
   @Override

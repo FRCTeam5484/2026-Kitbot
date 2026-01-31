@@ -26,7 +26,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    driveSubsystem.setDefaultCommand(new Drive(driveSubsystem, driverController));
+    driveSubsystem.setDefaultCommand(new Drive(driveSubsystem, ()->-driverController.getLeftY(), ()->driverController.getRightY()));
     fuelSubsystem.setDefaultCommand(fuelSubsystem.run(() -> fuelSubsystem.stop()));
     driverController.leftBumper().whileTrue(new Intake(fuelSubsystem));
     driverController.rightBumper().whileTrue(new LaunchSequence(fuelSubsystem));
